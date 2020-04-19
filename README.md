@@ -23,8 +23,11 @@ Take damage from hostiles or environment.
 The player will use the keyboard to play the game. 
 
 Controls:
+
 Move left : A
+
 Move Right: D
+
 Jump      : SPACE
 
 ## Game Features
