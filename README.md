@@ -23,19 +23,19 @@ Take damage from hostiles or environment.
 The player will use the keyboard to play the game. 
 
 Controls:
-. Move left : A
-. Move Right: D
-. Jump      : SPACE
+Move left : A
+Move Right: D
+Jump      : SPACE
 
 ## Game Features
 
-. Three different stages, different styles
-. Multiple different hostiles with seperate attacks
-. Power-ups to collect and give buffs
+1. Three different stages, different styles
+2. Multiple different hostiles with seperate attacks
+3. Power-ups to collect and give buffs
 
 ## Goals/Expectations for 3 weeks
 
-. Finish three stages
-. Design character graphics
-. Create hostile NPCs
-. Perfect wonky collision details
+1. Finish three stages
+2. Design character graphics
+3. Create hostile NPCs
+4. Perfect wonky collision details
