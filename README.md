@@ -24,7 +24,7 @@ The player will use the keyboard to play the game.
 
 Controls:
 
-Move left : A
+Move Left : A
 
 Move Right: D
 
