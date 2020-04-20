@@ -32,9 +32,21 @@ Jump      : SPACE
 
 ## Game Features
 
-1. Three different stages, different styles
-2. Multiple different hostiles with seperate attacks
-3. Power-ups to collect and give buffs
+1. Three different stages, different styles:
+  
+  a. Outside the factory, easy difficulty
+  b. Inside factory, medium difficulty 
+  c. The hot zone, hard difficulty
+  
+2. Two different hostile types:
+
+  a. Flying enemies: shoot down projectiles
+  b. ground troops: collision damage and shoot projectiles across
+
+3. Power-ups to collect and give buffs:
+
+  a. Speed boost
+  b. Health boost
 
 ## Goals/Expectations for 3 weeks
 
