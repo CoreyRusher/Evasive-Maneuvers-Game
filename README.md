@@ -7,12 +7,12 @@ Evasive Maneuvers
 
 ## Short Description of gameplay
 
-Your objective is to survive. In the process, you must avoid projectiles from every direction and destroy hostiles. 
+Your objective is to survive. In the process, you must avoid projectiles from every direction. 
 There are three stages to complete. Good luck.
 
 ## Win Condition
 
-Either survive until the timer reaches zero or destroy all hostiles.
+Survive until the timer reaches zero.
 
 ## Lose Condition
 
