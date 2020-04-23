@@ -17,7 +17,7 @@ class WinState extends FlxState
         override public function update(elapsed:Float):Void
             {
                 if (FlxG.keys.justPressed.SPACE){
-                    FlxG.switchState(new PlayState());
+                    FlxG.switchState(new Level1());
                 }
             }    
 }
