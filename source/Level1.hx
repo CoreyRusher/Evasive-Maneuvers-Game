@@ -1,16 +1,26 @@
 package;
 
+/**
+	Imports
+**/
+import flixel.text.FlxText;
+import timer.Timer;
 import entities.projectiles.Fireball;
 import flixel.FlxObject;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import entities.player.Hero;
 import entities.terrain.Wall;
+import entities.enemies.Flyer;
 import flixel.FlxState;
 import flixel.addons.display.FlxBackdrop;
 
-class PlayState extends FlxState
+class Level1 extends FlxState
 {
+	
+	/**
+		Variables
+	**/
 	private static var WALL_COUNT(default, never) = 20;
 	private static var FIRSTWALL_START_X(default, never) = 0;
 	private static var FIRSTWALL_START_Y(default, never) = 448;
@@ -21,25 +31,41 @@ class PlayState extends FlxState
 	private var hero:Hero;
 	private var walls:FlxTypedGroup<Wall>;
 	private var fireballs:FlxTypedGroup<Fireball>;
+	private var flyers:FlxTypedGroup<Flyer>;
+
+	private var timer = 90.0;
+	private var timerText:FlxText;
+	private var timerObject:Timer;
 
 	private var _backdrop:FlxBackdrop;
-
+	
+	/**
+		Create function.
+	**/
 	override public function create():Void
 	{
 		super.create();
-		
+
+		//Create the level scenery
 		_backdrop = new FlxBackdrop(AssetPaths.level1__png);
 		add(_backdrop);
-
+		
+		//Create the player.
 		hero = new Hero();
 		add(hero);
+		
+		//Create the timer.
+		timerObject = new Timer();
+		timerObject.setTimer(timer);
+		timerText = timerObject.createTimer();
+		add(timerText);
 
 		initializeWalls();
 		initializeFireballs();
 	}
 
 	/**
-		Function spawns three platforms for player to play on.
+		Function spawns platforms for player to play on.
 	**/
 	private function initializeWalls() {
 		walls = new FlxTypedGroup<Wall>();
@@ -53,6 +79,10 @@ class PlayState extends FlxState
 		add(walls);
 	}
 
+
+	/**
+		Function initializes fireballs.
+	**/
 	private function initializeFireballs() {
 		fireballs = new FlxTypedGroup<Fireball>();
 
@@ -67,8 +97,9 @@ class PlayState extends FlxState
 		add(fireballs);
 	}
 
-
-
+    /**
+		Update Function.
+	**/
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
@@ -76,31 +107,21 @@ class PlayState extends FlxState
 		//Turns on the floor
 		FlxG.collide(hero, walls);
 
-		// player overlaps with a fireball.
+		// Resolve fireball hit.
 		FlxG.overlap(hero, fireballs, resolveHeroFireballOverlap);
 
-		// Wrap various objects if gone offscreen.
+		// Respawn the fireballs.
 		for (fireball in fireballs) {
 		    respawnFireballs(fireball);
-		} 	
-	}
-	
-    private function screenWrapObject(wrappingObject:FlxObject) {
-		if (wrappingObject.x > FlxG.width) {
-			wrappingObject.x = 0 - wrappingObject.width;
-		} else if (wrappingObject.x + wrappingObject.width < 0) {
-			wrappingObject.x = FlxG.width;
-		}
-
-		if (wrappingObject.y > FlxG.height) {
-			wrappingObject.y = 0 - wrappingObject.height;
-		} else if (wrappingObject.y + wrappingObject.height < 0) {
-			wrappingObject.y = FlxG.height;
-		}
+		} 
+		
+		//Update the timer.
+		timer -= elapsed;
+		timerText.text = "Time: " + Std.int(timer);
 	}
 
     /**
-		Function respawns fireballs at a random y-axis position.
+		Function respawns fireballs.
 	**/
 	private function respawnFireballs(fireball:FlxObject) {
 		if (fireball.y > FlxG.height) {
