@@ -32,8 +32,9 @@ class Level1 extends FlxState
 	private var walls:FlxTypedGroup<Wall>;
 	private var fireballs:FlxTypedGroup<Fireball>;
 	private var flyers:FlxTypedGroup<Flyer>;
+	private var flyer1:Flyer;
 
-	private var timer = 90.0;
+	private var timer = 60.0;
 	private var timerText:FlxText;
 	private var timerObject:Timer;
 
@@ -54,6 +55,9 @@ class Level1 extends FlxState
 		hero = new Hero();
 		add(hero);
 		
+		flyer1 = new Flyer();
+		add(flyer1);
+
 		//Create the timer.
 		timerObject = new Timer();
 		timerObject.setTimer(timer);

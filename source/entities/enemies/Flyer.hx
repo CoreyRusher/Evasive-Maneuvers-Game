@@ -3,27 +3,34 @@ package entities.enemies;
 import flixel.FlxG;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
+import entities.projectiles.Fireball;
 
 class Flyer extends FlxSprite {
     public static var WIDTH(default, never):Int = 32;
     public static var HEIGHT(default, never):Int = 32;
-
-    public static var GRAVITY(default, never):Float = 300;
-    public static var TERMINAL_VELOCITY(default, never):Float = 600;
-    public static var X_SPEED(default, never):Float = 200;
-
-    public static var JUMP_SPEED(default, never):Float = -200;
-
-    private var leftInput:Bool = false;
-    private var rightInput:Bool = false;
-    private var jumpInput:Bool = false;
-
-    public function new(?X:Float = 0, ?Y:Float = 0) {
+    public static var HOVERHEIGHT = 150;
+   
+    public function new(?X:Float = 320, ?Y:Float = -32) {
         super(X, Y);
         makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
     }
 
     override function update(elapsed:Float) {
         super.update(elapsed);
+        if (this.y < HOVERHEIGHT){
+            velocity.y = 100;
+        }
+        if (this.y >= HOVERHEIGHT){
+            velocity.y = 0;
+            this.x += 100;
+            if (this.x + WIDTH >= FlxG.width && velocity.x >= 0){
+                velocity.x = -100;
+            }
+            if (this.x <= 0 && velocity.x <= 0){
+                velocity.x = 100;
+            }
+        }
+
     }
+
 }      
