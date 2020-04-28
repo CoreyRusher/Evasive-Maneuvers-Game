@@ -1,29 +1,67 @@
 package entities.enemies;
 
+/**
+	Imports
+**/
 import flixel.FlxG;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
+import entities.projectiles.Fireball;
 
 class Flyer extends FlxSprite {
+    
+    /**
+		Variables
+	**/
     public static var WIDTH(default, never):Int = 32;
     public static var HEIGHT(default, never):Int = 32;
+    public static var HOVERHEIGHT = 150;
+    public static var INITIALMOVE = false;
+    public var fireballCount = 10;
 
-    public static var GRAVITY(default, never):Float = 300;
-    public static var TERMINAL_VELOCITY(default, never):Float = 600;
-    public static var X_SPEED(default, never):Float = 200;
-
-    public static var JUMP_SPEED(default, never):Float = -200;
-
-    private var leftInput:Bool = false;
-    private var rightInput:Bool = false;
-    private var jumpInput:Bool = false;
-
-    public function new(?X:Float = 0, ?Y:Float = 0) {
+    /**
+	    Constructor
+    **/
+    public function new(?X:Float = 320, ?Y:Float = -32) {
         super(X, Y);
         makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
     }
 
+    /**
+		Function handles flyer attacks.
+	**/
+    public function shootFireball(){
+        var fireball = new Fireball(this.x + WIDTH / 2, this.y + HEIGHT);
+        FlxG.state.add(fireball);
+    }
+    
+    /**
+	    Override of the update function.
+    **/
     override function update(elapsed:Float) {
         super.update(elapsed);
+        
+        /**
+		    Handling Flyer movement
+	    **/
+        if (this.y < HOVERHEIGHT){
+            velocity.y = 100;
+        }
+        if (this.y >= HOVERHEIGHT){
+            
+            if (INITIALMOVE == false){
+            velocity.y = 0;
+            velocity.x = 100;
+            INITIALMOVE = true;
+            }
+            else{
+                if (this.x + WIDTH >= FlxG.width && velocity.x >= 0){
+                    velocity.x = -100;
+                }
+                if (this.x <= 0 && velocity.x <= 0){
+                    velocity.x = 100;
+                }
+            }    
+        }
     }
 }      
