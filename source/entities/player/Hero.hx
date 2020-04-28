@@ -1,23 +1,30 @@
 package entities.player;
 
+/**
+	Imports
+**/
 import flixel.FlxG;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 
 class Hero extends FlxSprite {
+    
+    /**
+	    Variables
+    **/
     public static var WIDTH(default, never):Int = 32;
     public static var HEIGHT(default, never):Int = 32;
-
     public static var GRAVITY(default, never):Float = 300;
     public static var TERMINAL_VELOCITY(default, never):Float = 600;
     public static var X_SPEED(default, never):Float = 200;
-
     public static var JUMP_SPEED(default, never):Float = -200;
-
     private var leftInput:Bool = false;
     private var rightInput:Bool = false;
     private var jumpInput:Bool = false;
 
+    /**
+	    Constructor
+    **/
     public function new(?X:Float = 304, ?Y:Float = 416) {
         super(X, Y);
         makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
@@ -27,6 +34,9 @@ class Hero extends FlxSprite {
         maxVelocity.y = TERMINAL_VELOCITY;
     }
 
+    /**
+	    Overrides the update function.
+    **/
     override function update(elapsed:Float) {
         // Set up nicer input-handling for movement.
         gatherInputs();
@@ -42,9 +52,7 @@ class Hero extends FlxSprite {
     }
 
     /**
-        Helper function responsible for interacting with HaxeFlixel systems to gather inputs 
-        relevant to the Hero. Helps keep code clean by restricting FlxG.keys input to a single spot,
-        which makes it much easier to change inputs, implement rebinding, etc. in the future.
+        Function to gather inputs.
     **/
     private function gatherInputs():Void {
         leftInput = FlxG.keys.pressed.A;
@@ -56,9 +64,6 @@ class Hero extends FlxSprite {
     /**
         Uses player input to determine if movement should occur in a positive or negative X 
         direction. If no movement inputs are detected, 0 is returned instead.
-        @param leftPressed Boolean indicating if the "left" movement button is pressed.
-        @param rightPressed Boolean indicating if the "right" movement button is pressed.
-        @return Returns 1, 0, or -1. Multiply movement speed by this to set movement direction.
     **/
     private function getMoveDirectionCoefficient(leftPressed:Bool, rightPressed:Bool):Int {
         var finalDirection:Int = 0;        
@@ -72,9 +77,7 @@ class Hero extends FlxSprite {
     }
 
     /**
-        Simple function for handling jump logic.
-        At the moment, this doesn't prevent the player from jumping while in the air.
-        @param jumpJustPressed Boolean indicating if the jump button was pressed this frame.
+        Simple jump function.
     **/
     private function jump(jumpJustPressed:Bool):Void {
         if (jumpJustPressed) {

@@ -1,12 +1,22 @@
 package entities.terrain;
 
+/**
+	Imports
+**/
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 
 class Wall extends FlxSprite {
+    
+    /**
+	    Variables
+    **/
     public static var WIDTH(default, never) = 32;
     public static var HEIGHT(default, never) = 32;
     
+    /**
+	    Constructor
+    **/
     public function new(?X:Float = 0, ?Y:Float = 0) {
         super(X, Y);
         makeGraphic(WIDTH, HEIGHT, FlxColor.GRAY);

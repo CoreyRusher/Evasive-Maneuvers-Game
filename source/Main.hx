@@ -1,10 +1,16 @@
 package;
 
+/**
+	Imports
+**/
 import flixel.FlxGame;
 import openfl.display.Sprite;
 
 class Main extends Sprite
 {
+	/**
+		Constructor
+	**/
 	public function new()
 	{
 		super();

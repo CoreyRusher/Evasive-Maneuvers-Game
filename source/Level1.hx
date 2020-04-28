@@ -123,6 +123,7 @@ class Level1 extends FlxState
 		timer -= elapsed;
 		timerText.text = "Time: " + Std.int(timer);
 	}
+	
 
     /**
 		Function respawns fireballs.
