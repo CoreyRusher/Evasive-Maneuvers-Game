@@ -16,7 +16,7 @@ class Flyer extends FlxSprite {
     public static var WIDTH(default, never):Int = 32;
     public static var HEIGHT(default, never):Int = 32;
     public static var HOVERHEIGHT = 150;
-    public static var INITIALMOVE = false;
+    public var INITIALMOVE = false;
     public var fireballCount = 10;
 
     /**
@@ -45,21 +45,21 @@ class Flyer extends FlxSprite {
 		    Handling Flyer movement
 	    **/
         if (this.y < HOVERHEIGHT){
-            velocity.y = 100;
+            velocity.y = 200;
         }
         if (this.y >= HOVERHEIGHT){
             
             if (INITIALMOVE == false){
             velocity.y = 0;
-            velocity.x = 100;
+            velocity.x = 250;
             INITIALMOVE = true;
             }
             else{
                 if (this.x + WIDTH >= FlxG.width && velocity.x >= 0){
-                    velocity.x = -100;
+                    velocity.x = -250;
                 }
                 if (this.x <= 0 && velocity.x <= 0){
-                    velocity.x = 100;
+                    velocity.x = 250;
                 }
             }    
         }

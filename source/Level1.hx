@@ -3,6 +3,7 @@ package;
 /**
 	Imports
 **/
+import flixel.FlxBasic;
 import flixel.text.FlxText;
 import timer.Timer;
 import entities.projectiles.Fireball;
@@ -28,11 +29,17 @@ class Level1 extends FlxState
 	private static var FIREBALL_COUNT(default, never) = 10;
 	private static var FIREBALL_SPAWN_BORDER(default, never) = 50;
 
+	private var FLYER_COUNT = 3;
+	private var FLYERSPAWN = true;
+
 	private var hero:Hero;
 	private var walls:FlxTypedGroup<Wall>;
 	private var fireballs:FlxTypedGroup<Fireball>;
 	private var flyers:FlxTypedGroup<Flyer>;
+
 	private var flyer1:Flyer;
+	private var flyer2:Flyer;
+	private var flyer2:Flyer;
 
 	private var timer = 60.0;
 	private var timerText:FlxText;
@@ -54,9 +61,6 @@ class Level1 extends FlxState
 		//Create the player.
 		hero = new Hero();
 		add(hero);
-		
-		flyer1 = new Flyer();
-		add(flyer1);
 
 		//Create the timer.
 		timerObject = new Timer();
@@ -66,6 +70,7 @@ class Level1 extends FlxState
 
 		initializeWalls();
 		initializeFireballs();
+		initializeFlyers();
 	}
 
 	/**
@@ -101,6 +106,16 @@ class Level1 extends FlxState
 		add(fireballs);
 	}
 
+	private function initializeFlyers(){
+		flyers = new FlxTypedGroup<Flyer>();
+		for (i in 0...FLYER_COUNT) {
+			var flyer = new Flyer();
+			flyers.add(flyer);
+		}
+		flyer1 = flyers.getFirstExisting();
+		add(flyer1);
+	}
+
     /**
 		Update Function.
 	**/
@@ -122,6 +137,12 @@ class Level1 extends FlxState
 		//Update the timer.
 		timer -= elapsed;
 		timerText.text = "Time: " + Std.int(timer);
+
+		if (timer <= 45 && FLYER_COUNT == 2){
+			FLYER_COUNT -= 1;
+			flyer2 = flyers.getFirstAvailable();
+			add(flyer2);		
+		}
 	}
 	
 
