@@ -30,16 +30,12 @@ class Level1 extends FlxState
 	private static var FIREBALL_SPAWN_BORDER(default, never) = 50;
 
 	private var FLYER_COUNT = 3;
-	private var FLYERSPAWN = true;
+	private var flyerCounter = 3;
 
 	private var hero:Hero;
 	private var walls:FlxTypedGroup<Wall>;
 	private var fireballs:FlxTypedGroup<Fireball>;
 	private var flyers:FlxTypedGroup<Flyer>;
-
-	private var flyer1:Flyer;
-	private var flyer2:Flyer;
-	private var flyer2:Flyer;
 
 	private var timer = 60.0;
 	private var timerText:FlxText;
@@ -69,7 +65,7 @@ class Level1 extends FlxState
 		add(timerText);
 
 		initializeWalls();
-		initializeFireballs();
+		//initializeFireballs();
 		initializeFlyers();
 	}
 
@@ -110,10 +106,13 @@ class Level1 extends FlxState
 		flyers = new FlxTypedGroup<Flyer>();
 		for (i in 0...FLYER_COUNT) {
 			var flyer = new Flyer();
+			flyer.exists = false;
 			flyers.add(flyer);
 		}
-		flyer1 = flyers.getFirstExisting();
-		add(flyer1);
+		var flyer1 = flyers.getFirstAvailable();
+		flyer1.exists = true;
+		flyerCounter -= 1;
+		add(flyers);
 	}
 
     /**
@@ -138,14 +137,21 @@ class Level1 extends FlxState
 		timer -= elapsed;
 		timerText.text = "Time: " + Std.int(timer);
 
-		if (timer <= 45 && FLYER_COUNT == 2){
-			FLYER_COUNT -= 1;
-			flyer2 = flyers.getFirstAvailable();
-			add(flyer2);		
+		//Timed flyer spawns
+		if (timer <= 45 && flyerCounter == 2){
+			flyerCounter -= 1;
+			var flyer2 = flyers.getFirstAvailable();
+			flyer2.exists = true;	
 		}
+		if (timer <= 15 && flyerCounter == 1){
+			flyerCounter -= 1;
+			var flyer3 = flyers.getFirstAvailable();
+			flyer3.exists = true;
+		}
+		
+		//Attacks	
 	}
 	
-
     /**
 		Function respawns fireballs.
 	**/

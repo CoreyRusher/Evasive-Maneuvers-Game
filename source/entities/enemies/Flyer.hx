@@ -33,6 +33,7 @@ class Flyer extends FlxSprite {
     public function shootFireball(){
         var fireball = new Fireball(this.x + WIDTH / 2, this.y + HEIGHT);
         FlxG.state.add(fireball);
+        }    
     }
     
     /**
@@ -40,7 +41,7 @@ class Flyer extends FlxSprite {
     **/
     override function update(elapsed:Float) {
         super.update(elapsed);
-        
+    
         /**
 		    Handling Flyer movement
 	    **/
