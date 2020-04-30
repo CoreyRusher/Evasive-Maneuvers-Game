@@ -3,6 +3,7 @@ package;
 /**
 	Imports
 **/
+import flixel.FlxBasic;
 import flixel.text.FlxText;
 import timer.Timer;
 import entities.projectiles.Fireball;
@@ -14,6 +15,7 @@ import entities.terrain.Wall;
 import entities.enemies.Flyer;
 import flixel.FlxState;
 import flixel.addons.display.FlxBackdrop;
+import entities.enemies.Grounder;
 
 class Level1 extends FlxState
 {
@@ -28,11 +30,15 @@ class Level1 extends FlxState
 	private static var FIREBALL_COUNT(default, never) = 10;
 	private static var FIREBALL_SPAWN_BORDER(default, never) = 50;
 
+	private var FLYER_COUNT = 3;
+	private var flyerCounter = 3;
+
 	private var hero:Hero;
 	private var walls:FlxTypedGroup<Wall>;
 	private var fireballs:FlxTypedGroup<Fireball>;
 	private var flyers:FlxTypedGroup<Flyer>;
-	private var flyer1:Flyer;
+
+	private var grounderCounter = 1;
 
 	private var timer = 60.0;
 	private var timerText:FlxText;
@@ -54,9 +60,6 @@ class Level1 extends FlxState
 		//Create the player.
 		hero = new Hero();
 		add(hero);
-		
-		flyer1 = new Flyer();
-		add(flyer1);
 
 		//Create the timer.
 		timerObject = new Timer();
@@ -65,7 +68,8 @@ class Level1 extends FlxState
 		add(timerText);
 
 		initializeWalls();
-		initializeFireballs();
+		//initializeFireballs();
+		initializeFlyers();
 	}
 
 	/**
@@ -101,6 +105,19 @@ class Level1 extends FlxState
 		add(fireballs);
 	}
 
+	private function initializeFlyers(){
+		flyers = new FlxTypedGroup<Flyer>();
+		for (i in 0...FLYER_COUNT) {
+			var flyer = new Flyer();
+			flyer.exists = false;
+			flyers.add(flyer);
+		}
+		var flyer1 = flyers.getFirstAvailable();
+		flyer1.exists = true;
+		flyerCounter -= 1;
+		add(flyers);
+	}
+
     /**
 		Update Function.
 	**/
@@ -114,17 +131,36 @@ class Level1 extends FlxState
 		// Resolve fireball hit.
 		FlxG.overlap(hero, fireballs, resolveHeroFireballOverlap);
 
-		// Respawn the fireballs.
+		/* // Respawn the fireballs.
 		for (fireball in fireballs) {
 		    respawnFireballs(fireball);
-		} 
+		}  */
 		
 		//Update the timer.
 		timer -= elapsed;
 		timerText.text = "Time: " + Std.int(timer);
+
+		//Timed spawns
+		if (timer <= 45 && flyerCounter == 2){
+			flyerCounter -= 1;
+			var flyer2 = flyers.getFirstAvailable();
+			flyer2.exists = true;	
+		}
+		if (timer <= 30 && grounderCounter == 1){
+			grounderCounter -= 1;
+			var grounder1 = new Grounder();
+			add(grounder1);
+		}
+		
+		if (timer <= 15 && flyerCounter == 1){
+			flyerCounter -= 1;
+			var flyer3 = flyers.getFirstAvailable();
+			flyer3.exists = true;
+		}
+		
+		//Attacks	
 	}
 	
-
     /**
 		Function respawns fireballs.
 	**/
