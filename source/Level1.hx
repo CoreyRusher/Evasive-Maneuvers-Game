@@ -15,6 +15,7 @@ import entities.terrain.Wall;
 import entities.enemies.Flyer;
 import flixel.FlxState;
 import flixel.addons.display.FlxBackdrop;
+import entities.enemies.Grounder;
 
 class Level1 extends FlxState
 {
@@ -36,6 +37,8 @@ class Level1 extends FlxState
 	private var walls:FlxTypedGroup<Wall>;
 	private var fireballs:FlxTypedGroup<Fireball>;
 	private var flyers:FlxTypedGroup<Flyer>;
+
+	private var grounderCounter = 1;
 
 	private var timer = 60.0;
 	private var timerText:FlxText;
@@ -128,21 +131,27 @@ class Level1 extends FlxState
 		// Resolve fireball hit.
 		FlxG.overlap(hero, fireballs, resolveHeroFireballOverlap);
 
-		// Respawn the fireballs.
+		/* // Respawn the fireballs.
 		for (fireball in fireballs) {
 		    respawnFireballs(fireball);
-		} 
+		}  */
 		
 		//Update the timer.
 		timer -= elapsed;
 		timerText.text = "Time: " + Std.int(timer);
 
-		//Timed flyer spawns
+		//Timed spawns
 		if (timer <= 45 && flyerCounter == 2){
 			flyerCounter -= 1;
 			var flyer2 = flyers.getFirstAvailable();
 			flyer2.exists = true;	
 		}
+		if (timer <= 30 && grounderCounter == 1){
+			grounderCounter -= 1;
+			var grounder1 = new Grounder();
+			add(grounder1);
+		}
+		
 		if (timer <= 15 && flyerCounter == 1){
 			flyerCounter -= 1;
 			var flyer3 = flyers.getFirstAvailable();

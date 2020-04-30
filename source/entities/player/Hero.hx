@@ -6,6 +6,7 @@ package entities.player;
 import flixel.FlxG;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
+import flixel.FlxObject;
 
 class Hero extends FlxSprite {
     
@@ -80,8 +81,8 @@ class Hero extends FlxSprite {
         Simple jump function.
     **/
     private function jump(jumpJustPressed:Bool):Void {
-        if (jumpJustPressed) {
-            velocity.y = JUMP_SPEED;
+        if (jumpJustPressed && this.isTouching(FlxObject.DOWN)) {
+            velocity.y = JUMP_SPEED; 
         }
     }
    
