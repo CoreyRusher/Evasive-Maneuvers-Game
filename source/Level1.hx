@@ -37,7 +37,9 @@ class Level1 extends FlxState
 	private var walls:FlxTypedGroup<Wall>;
 	private var fireballs:FlxTypedGroup<Fireball>;
 	private var flyers:FlxTypedGroup<Flyer>;
+	private var grounders:FlxTypedGroup<Grounder>;
 
+	private var GROUNDER_COUNT = 1;
 	private var grounderCounter = 1;
 
 	private var timer = 60.0;
@@ -70,6 +72,7 @@ class Level1 extends FlxState
 		initializeWalls();
 		//initializeFireballs();
 		initializeFlyers();
+		initializeGrounders();
 	}
 
 	/**
@@ -118,6 +121,15 @@ class Level1 extends FlxState
 		add(flyers);
 	}
 
+	private function initializeGrounders(){
+		grounders = new FlxTypedGroup<Grounder>();
+		for (i in 0...GROUNDER_COUNT) {
+			var grounder = new Grounder();
+			grounder.exists = false;
+			grounders.add(grounder);
+		}
+		add(grounders);
+	}	
     /**
 		Update Function.
 	**/
@@ -130,6 +142,12 @@ class Level1 extends FlxState
 
 		// Resolve fireball hit.
 		FlxG.overlap(hero, fireballs, resolveHeroFireballOverlap);
+
+		// Resolve flyer collision.
+		FlxG.overlap(hero, flyers, resolveHeroFlyerOverlap);
+
+		// Resolve grounder collision.
+		FlxG.overlap(hero, grounders, resolveHeroGrounderOverlap);
 
 		/* // Respawn the fireballs.
 		for (fireball in fireballs) {
@@ -148,8 +166,8 @@ class Level1 extends FlxState
 		}
 		if (timer <= 30 && grounderCounter == 1){
 			grounderCounter -= 1;
-			var grounder1 = new Grounder();
-			add(grounder1);
+			var grounder1 = grounders.getFirstAvailable();
+			grounder1.exists = true;
 		}
 		
 		if (timer <= 15 && flyerCounter == 1){
@@ -159,6 +177,7 @@ class Level1 extends FlxState
 		}
 		
 		//Attacks	
+		
 	}
 	
     /**
@@ -185,4 +204,15 @@ class Level1 extends FlxState
 		#end
 	}
 
+	private function resolveHeroFlyerOverlap(hero:Hero, flyer:Flyer) {
+		flyer.kill();
+		hero.kill();
+		FlxG.switchState(new FailState());
+	}
+
+	private function resolveHeroGrounderOverlap(hero:Hero, grounder:Grounder) {
+		grounder.kill();
+		hero.kill();
+		FlxG.switchState(new FailState());
+	}
 }

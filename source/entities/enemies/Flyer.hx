@@ -25,6 +25,7 @@ class Flyer extends FlxSprite {
     public function new(?X:Float = 320, ?Y:Float = -32) {
         super(X, Y);
         makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
+        loadGraphic(AssetPaths.FLYERPIC__png, true, WIDTH, HEIGHT);
     }
 
     /**

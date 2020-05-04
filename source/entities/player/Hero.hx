@@ -18,10 +18,14 @@ class Hero extends FlxSprite {
     public static var GRAVITY(default, never):Float = 300;
     public static var TERMINAL_VELOCITY(default, never):Float = 600;
     public static var X_SPEED(default, never):Float = 200;
+    public static var X_OFFSET(default, never):Int = 11;
     public static var JUMP_SPEED(default, never):Float = -200;
     private var leftInput:Bool = false;
     private var rightInput:Bool = false;
     private var jumpInput:Bool = false;
+    public static var STAND_ANIMATION:String = "stand";
+    public static var WALK_ANIMATION:String = "walk";
+
 
     /**
 	    Constructor
@@ -29,6 +33,14 @@ class Hero extends FlxSprite {
     public function new(?X:Float = 304, ?Y:Float = 416) {
         super(X, Y);
         makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
+
+        loadGraphic(AssetPaths.Hero__png, true, WIDTH, HEIGHT);
+        animation.add(STAND_ANIMATION, [0], 0, false);
+        animation.add(WALK_ANIMATION, [1, 0, 2, 0], 5);
+        animation.play(STAND_ANIMATION);
+        width = WIDTH;
+        height = HEIGHT;
+        offset.x = X_OFFSET;
 
         // Set up "gravity" (constant acceleration) and "terminal velocity" (max fall speed)
         acceleration.y = GRAVITY;
@@ -45,7 +57,15 @@ class Hero extends FlxSprite {
         // Horizontal movement
         var direction:Int = getMoveDirectionCoefficient(leftInput, rightInput);
         velocity.x = X_SPEED * direction;
-       
+        if (direction < 0) {
+            flipX = true;
+            animation.play(WALK_ANIMATION);
+        } else if (direction > 0) {
+            flipX = false;
+            animation.play(WALK_ANIMATION);
+        } else {
+            animation.play(STAND_ANIMATION);
+        }
         // Jump
         jump(jumpInput);
 
@@ -68,10 +88,10 @@ class Hero extends FlxSprite {
     **/
     private function getMoveDirectionCoefficient(leftPressed:Bool, rightPressed:Bool):Int {
         var finalDirection:Int = 0;        
-        if (leftPressed) {
+        if (leftPressed && this.x >= 0) {
             finalDirection--;
         }
-        if (rightPressed) {
+        if (rightPressed && this.x + WIDTH <= FlxG.width) {
             finalDirection++;
         }
         return finalDirection;
