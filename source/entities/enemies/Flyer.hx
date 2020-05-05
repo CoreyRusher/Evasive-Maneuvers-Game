@@ -26,10 +26,11 @@ class Flyer extends FlxSprite {
     /**
 	    Constructor
     **/
-    public function new(?X:Float = 320, ?Y:Float = -32) {
+    public function new(?X:Float = 320, ?Y:Float = -32, stateFireballs:FlxTypedGroup<Fireball>) {
         super(X, Y);
         makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
         loadGraphic(AssetPaths.FLYERPIC__png, true, WIDTH, HEIGHT);
+        this.fireballs = stateFireballs;
     }
 
     /**
@@ -37,9 +38,7 @@ class Flyer extends FlxSprite {
 	**/
     public function shootFireball(){
         var fireball = new Fireball(this.x + WIDTH / 2, this.y + HEIGHT);
-        fireball.exists = false;
 		fireballs.add(fireball);
-        FlxG.state.add(fireball);
     }    
 
     /**

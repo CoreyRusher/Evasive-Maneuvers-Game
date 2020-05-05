@@ -18,7 +18,7 @@ class Hero extends FlxSprite {
     public static var GRAVITY(default, never):Float = 300;
     public static var TERMINAL_VELOCITY(default, never):Float = 600;
     public static var X_SPEED(default, never):Float = 200;
-    public static var X_OFFSET(default, never):Int = 11;
+    public static var X_OFFSET(default, never):Int = 7;
     public static var JUMP_SPEED(default, never):Float = -200;
     private var leftInput:Bool = false;
     private var rightInput:Bool = false;
@@ -38,7 +38,7 @@ class Hero extends FlxSprite {
         animation.add(STAND_ANIMATION, [0], 0, false);
         animation.add(WALK_ANIMATION, [1, 0, 2, 0], 5);
         animation.play(STAND_ANIMATION);
-        width = WIDTH;
+        width = 18;
         height = HEIGHT;
         offset.x = X_OFFSET;
 

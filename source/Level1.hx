@@ -46,6 +46,7 @@ class Level1 extends FlxState
 	private var timerObject:Timer;
 
 	private var FIREBALL:Fireball;
+	private var fireballs:FlxTypedGroup<Fireball>;
 
 	private var _backdrop:FlxBackdrop;
 	
@@ -70,9 +71,12 @@ class Level1 extends FlxState
 		timerText = timerObject.createTimer();
 		add(timerText);
 
+		fireballs = new FlxTypedGroup<Fireball>();
 		initializeWalls();
 		initializeFlyers();
 		initializeGrounders();
+		add(fireballs);
+		
 	}
 
 	/**
@@ -93,7 +97,7 @@ class Level1 extends FlxState
 	private function initializeFlyers(){
 		flyers = new FlxTypedGroup<Flyer>();
 		for (i in 0...FLYER_COUNT) {
-			var flyer = new Flyer();
+			var flyer = new Flyer(320, -32, fireballs);
 			flyer.exists = false;
 			flyers.add(flyer);
 		}
@@ -123,9 +127,8 @@ class Level1 extends FlxState
 		FlxG.collide(hero, walls);
 
 		// Resolve fireball hit.
-		FlxG.overlap(hero, FIREBALL, resolveHeroFireballOverlap);
+		FlxG.overlap(hero, fireballs, resolveHeroFireballOverlap);
 		
-
 		// Resolve flyer collision.
 		FlxG.overlap(hero, flyers, resolveHeroFlyerOverlap);
 
