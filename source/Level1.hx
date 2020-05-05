@@ -7,6 +7,7 @@ import flixel.FlxBasic;
 import flixel.text.FlxText;
 import timer.Timer;
 import entities.projectiles.Fireball;
+import entities.powerups.ExtraHit;
 import flixel.FlxObject;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -27,15 +28,13 @@ class Level1 extends FlxState
 	private static var FIRSTWALL_START_X(default, never) = 0;
 	private static var FIRSTWALL_START_Y(default, never) = 448;
 
-	private static var FIREBALL_COUNT(default, never) = 10;
-	private static var FIREBALL_SPAWN_BORDER(default, never) = 50;
-
 	private var FLYER_COUNT = 3;
 	private var flyerCounter = 3;
 
+	private var powerupCounter = 1;
+
 	private var hero:Hero;
 	private var walls:FlxTypedGroup<Wall>;
-	private var fireballs:FlxTypedGroup<Fireball>;
 	private var flyers:FlxTypedGroup<Flyer>;
 	private var grounders:FlxTypedGroup<Grounder>;
 
@@ -45,6 +44,8 @@ class Level1 extends FlxState
 	private var timer = 60.0;
 	private var timerText:FlxText;
 	private var timerObject:Timer;
+
+	private var FIREBALL:Fireball;
 
 	private var _backdrop:FlxBackdrop;
 	
@@ -70,7 +71,6 @@ class Level1 extends FlxState
 		add(timerText);
 
 		initializeWalls();
-		//initializeFireballs();
 		initializeFlyers();
 		initializeGrounders();
 	}
@@ -88,24 +88,6 @@ class Level1 extends FlxState
 			walls.add(wall1);
 		}
 		add(walls);
-	}
-
-
-	/**
-		Function initializes fireballs.
-	**/
-	private function initializeFireballs() {
-		fireballs = new FlxTypedGroup<Fireball>();
-
-		for (i in 0...FIREBALL_COUNT) {
-			var x:Float = FlxG.random.int(FIREBALL_SPAWN_BORDER, 
-				FlxG.width - FIREBALL_SPAWN_BORDER);
-			var y:Float = FlxG.random.int(FIREBALL_SPAWN_BORDER, 
-				FlxG.height - FIREBALL_SPAWN_BORDER);
-			var fireball = new Fireball(x, y);
-			fireballs.add(fireball);
-		}
-		add(fireballs);
 	}
 
 	private function initializeFlyers(){
@@ -141,18 +123,14 @@ class Level1 extends FlxState
 		FlxG.collide(hero, walls);
 
 		// Resolve fireball hit.
-		FlxG.overlap(hero, fireballs, resolveHeroFireballOverlap);
+		FlxG.overlap(hero, FIREBALL, resolveHeroFireballOverlap);
+		
 
 		// Resolve flyer collision.
 		FlxG.overlap(hero, flyers, resolveHeroFlyerOverlap);
 
 		// Resolve grounder collision.
 		FlxG.overlap(hero, grounders, resolveHeroGrounderOverlap);
-
-		/* // Respawn the fireballs.
-		for (fireball in fireballs) {
-		    respawnFireballs(fireball);
-		}  */
 		
 		//Update the timer.
 		timer -= elapsed;
@@ -174,21 +152,19 @@ class Level1 extends FlxState
 			flyerCounter -= 1;
 			var flyer3 = flyers.getFirstAvailable();
 			flyer3.exists = true;
+		}	
+
+		if (timer <= 0){
+			FlxG.switchState(new Level1AdvanceState());
 		}
-		
-		//Attacks	
-		
-	}
-	
-    /**
-		Function respawns fireballs.
-	**/
-	private function respawnFireballs(fireball:FlxObject) {
-		if (fireball.y > FlxG.height) {
-			fireball.y = 0 - fireball.height;
-			fireball.x = FlxG.random.int(FIREBALL_SPAWN_BORDER, 
-				FlxG.width - FIREBALL_SPAWN_BORDER);
-		} 
+
+		//Powerup Spawn
+		/* if (timer <= 30 && powerupCounter == 1){
+			powerupCounter -= 1;
+			var powerup = new ExtraHit(500,438);
+			add(powerup);
+		}
+		 */
 	}
 
 	/**
@@ -208,11 +184,19 @@ class Level1 extends FlxState
 		flyer.kill();
 		hero.kill();
 		FlxG.switchState(new FailState());
+
+		#if debug
+		//trace("Hero and Flyer collided!");
+		#end
 	}
 
 	private function resolveHeroGrounderOverlap(hero:Hero, grounder:Grounder) {
 		grounder.kill();
 		hero.kill();
 		FlxG.switchState(new FailState());
+
+		#if debug
+		//trace("Hero and Grounder collided!");
+		#end
 	}
 }

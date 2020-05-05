@@ -16,8 +16,10 @@ class Flyer extends FlxSprite {
     public static var WIDTH(default, never):Int = 32;
     public static var HEIGHT(default, never):Int = 32;
     public static var HOVERHEIGHT = 150;
+    public static var FIREBALL_DELAY(default, never):Float = 1;
     public var INITIALMOVE = false;
-    public var fireballCount = 10;
+    public var fireballCount = 20;
+    public var fireballTimer:Float = FIREBALL_DELAY;
 
     /**
 	    Constructor
@@ -34,14 +36,21 @@ class Flyer extends FlxSprite {
     public function shootFireball(){
         var fireball = new Fireball(this.x + WIDTH / 2, this.y + HEIGHT);
         FlxG.state.add(fireball);
-        }    
+    }    
 
     /**
 	    Override of the update function.
     **/
     override function update(elapsed:Float) {
         super.update(elapsed);
-    
+        
+        fireballTimer -= elapsed;
+        if (fireballTimer < 0){
+            shootFireball();
+            fireballCount -= 1;
+            fireballTimer = FIREBALL_DELAY;
+        }
+
         /**
 		    Handling Flyer movement
 	    **/

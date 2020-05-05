@@ -25,6 +25,7 @@ class Grounder extends FlxSprite {
     public function new(?X:Float = -32, ?Y:Float = 416) {
         super(X, Y);
         makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
+        loadGraphic(AssetPaths.GROUNDERPIC__png, true, WIDTH, HEIGHT);
     }
 
     /**
