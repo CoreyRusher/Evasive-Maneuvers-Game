@@ -3,6 +3,7 @@ package entities.enemies;
 /**
 	Imports
 **/
+import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxG;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
@@ -20,6 +21,7 @@ class Flyer extends FlxSprite {
     public var INITIALMOVE = false;
     public var fireballCount = 20;
     public var fireballTimer:Float = FIREBALL_DELAY;
+    public var fireballs:FlxTypedGroup<Fireball>;
 
     /**
 	    Constructor
@@ -35,6 +37,8 @@ class Flyer extends FlxSprite {
 	**/
     public function shootFireball(){
         var fireball = new Fireball(this.x + WIDTH / 2, this.y + HEIGHT);
+        fireball.exists = false;
+		fireballs.add(fireball);
         FlxG.state.add(fireball);
     }    
 
