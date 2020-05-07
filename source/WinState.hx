@@ -7,7 +7,7 @@ import flixel.text.FlxText;
 import flixel.FlxState;
 import flixel.FlxG;
 
-class Level1AdvanceState extends FlxState
+class WinState extends FlxState
 {
     /**
 	    Create Function.
@@ -15,9 +15,9 @@ class Level1AdvanceState extends FlxState
     override public function create():Void
         {
             super.create();
-            var text = new FlxText(155, 180, "You Win Round 1!", 32);
+            var text = new FlxText(155, 180, "You Win!", 64);
             add(text);
-            var text2 = new FlxText(80, 300, "Press Space to move on.", 32);
+            var text2 = new FlxText(80, 300, "Press Space to play again.", 32);
             add(text2);
         }
         
@@ -27,7 +27,7 @@ class Level1AdvanceState extends FlxState
     override public function update(elapsed:Float):Void
         {
             if (FlxG.keys.justPressed.SPACE){
-                FlxG.switchState(new Level2());
+                FlxG.switchState(new Level1());
             }
         }    
 }

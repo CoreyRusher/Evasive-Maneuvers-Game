@@ -20,8 +20,9 @@ class Hero extends FlxSprite {
     public static var X_SPEED(default, never):Float = 200;
     public static var X_OFFSET(default, never):Int = 7;
     public static var JUMP_SPEED(default, never):Float = -200;
-    public var lifeCounter = 1;
     
+    public var lifeCounter = 1;
+
     private var leftInput:Bool = false;
     private var rightInput:Bool = false;
     private var jumpInput:Bool = false;
