@@ -14,6 +14,9 @@ There are three stages to complete. Good luck.
 ![hover-over-text](/docs/gameScreenshot.PNG?raw=true)
 
 
+[play here!](https://crusherah.github.io/Evasive-Maneuvers-Game/)
+
+
 ## Win Condition
 
 Survive until the timer reaches zero.
