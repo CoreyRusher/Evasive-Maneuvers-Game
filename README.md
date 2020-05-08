@@ -14,7 +14,7 @@ There are three stages to complete. Good luck.
 ![hover-over-text](/docs/gameScreenshot.PNG?raw=true)
 
 
-[play here!](https://crusherah.github.io/Evasive-Maneuvers-Game/)
+[Click here to suffer, I mean uh play!](https://crusherah.github.io/Evasive-Maneuvers-Game/)
 
 
 ## Win Condition
