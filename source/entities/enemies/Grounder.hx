@@ -17,8 +17,13 @@ class Grounder extends FlxSprite {
     public static var HEIGHT(default, never):Int = 32;
     public static var SPAWNHEIGHT = 416;
     public var INITIALMOVE = false;
+    
     public var fireballCount = 10;
+    public var driveDistance = 640;
+    public var carSpeed = 250;
+    public var startLine = 0;
 
+    public var spawnSide:Int = 0;
     /**
 	    Constructor
     **/
@@ -46,15 +51,18 @@ class Grounder extends FlxSprite {
 		    Handling Grounder movement
 	    **/
             if (this.x < 0){
-            velocity.x = 200;
-        } 
+            velocity.x = carSpeed;
+        }
+            if (this.x > FlxG.width) {
+                velocity.x = -carSpeed;
+        }
         
         else{
-            if (this.x + WIDTH >= FlxG.width && velocity.x >= 0){
-                velocity.x = -250;
+            if (this.x + WIDTH >= driveDistance && velocity.x >= 0){
+                velocity.x = -carSpeed;
             }
-            if (this.x <= 0 && velocity.x <= 0){
-                velocity.x = 250;
+            if (this.x <= startLine && velocity.x <= 0){
+                velocity.x = carSpeed;
             }
         }    
     }

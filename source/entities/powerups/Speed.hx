@@ -6,7 +6,7 @@ package entities.powerups;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 
-class ExtraHit extends FlxSprite {
+class Speed extends FlxSprite {
     
     /**
         Variables
@@ -19,6 +19,6 @@ class ExtraHit extends FlxSprite {
     **/
     public function new(?X:Float = 0, ?Y:Float = 0) {
         super(X, Y);
-        makeGraphic(WIDTH, HEIGHT, FlxColor.YELLOW);
+        makeGraphic(WIDTH, HEIGHT, FlxColor.BLUE);
     }
 }   

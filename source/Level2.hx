@@ -3,7 +3,6 @@ package;
 /**
 	Imports
 **/
-import entities.powerups.ExtraHit;
 import flixel.FlxBasic;
 import flixel.text.FlxText;
 import timer.Timer;
@@ -18,22 +17,25 @@ import entities.enemies.Flyer;
 import flixel.FlxState;
 import flixel.addons.display.FlxBackdrop;
 import entities.enemies.Grounder;
+import entities.powerups.ExtraHit;
+import entities.powerups.Speed;
 
-class Level1 extends FlxState
+class Level2 extends FlxState
 {
 	
 	/**
 		Variables
 	**/
-	private static var WALL_COUNT(default, never) = 20;
+    private static var WALL_COUNT_ONE(default, never) = 8;
+    private static var WALL_COUNT_TWO(default, never) = 8;
 	private static var FIRSTWALL_START_X(default, never) = 0;
-	private static var FIRSTWALL_START_Y(default, never) = 448;
+    private static var FIRSTWALL_START_Y(default, never) = 448;
+    private static var SECONDWALL_START_X(default, never) = 385;
+	private static var SECONDWALL_START_Y(default, never) = 448;
 
-	private var FLYER_COUNT = 3;
-	private var flyerCounter = 3;
+	private var FLYER_COUNT = 6;
+	private var flyerCounter = 4;
 
-	private var healthPowerup:ExtraHit;
-	private var speedPowerup:Speed;
 	private var powerupCounter = 1;
 
 	private var hero:Hero;
@@ -41,10 +43,13 @@ class Level1 extends FlxState
 	private var flyers:FlxTypedGroup<Flyer>;
 	private var grounders:FlxTypedGroup<Grounder>;
 
-	private var GROUNDER_COUNT = 1;
-	private var grounderCounter = 1;
+	private var speedPowerup:Speed;
+	private var healthPowerup:ExtraHit;
 
-	private var timer = 60.0;
+	private var GROUNDER_COUNT = 2;
+	private var grounderCounter = 2;
+
+	private var timer = 90.0;
 	private var timerText:FlxText;
 	private var timerObject:Timer;
 
@@ -61,11 +66,11 @@ class Level1 extends FlxState
 		super.create();
 
 		//Create the level scenery
-		_backdrop = new FlxBackdrop(AssetPaths.level1__png);
+		_backdrop = new FlxBackdrop(AssetPaths.LEVEL2__png);
 		add(_backdrop);
 		
 		//Create the player.
-		hero = new Hero();
+		hero = new Hero(64);
 		add(hero);
 
 		//Create the timer.
@@ -88,9 +93,17 @@ class Level1 extends FlxState
 	private function initializeWalls() {
 		walls = new FlxTypedGroup<Wall>();
 
-		for (i in 0...WALL_COUNT) {
+		for (i in 0...WALL_COUNT_ONE) {
 			var x1:Float = FIRSTWALL_START_X + (i * Wall.WIDTH);
 			var y1:Float = FIRSTWALL_START_Y;
+			var wall1:Wall = new Wall(x1, y1);
+			walls.add(wall1);
+		}
+        add(walls);
+        
+        for (i in 0...WALL_COUNT_TWO) {
+			var x1:Float = SECONDWALL_START_X + (i * Wall.WIDTH);
+			var y1:Float = SECONDWALL_START_Y;
 			var wall1:Wall = new Wall(x1, y1);
 			walls.add(wall1);
 		}
@@ -136,46 +149,71 @@ class Level1 extends FlxState
 		FlxG.overlap(hero, flyers, resolveHeroFlyerOverlap);
 
 		// Resolve grounder collision.
-		FlxG.overlap(hero, grounders, resolveHeroGrounderOverlap);
-
+        FlxG.overlap(hero, grounders, resolveHeroGrounderOverlap);
+		
 		//Resolve speed powerup collision.
 		FlxG.overlap(hero, speedPowerup, resolveHeroSpeedPowerupOverlap);
 
 		//Resolve health powerup collision.
 		FlxG.overlap(hero, healthPowerup, resolveHeroHealthPowerupOverlap);
+
+        // Kill if player falls.
+        if (hero.isOnScreen() == false){
+            hero.kill;
+            FlxG.switchState(new FailState());
+        }
 		
 		//Update the timer.
 		timer -= elapsed;
 		timerText.text = "Time: " + Std.int(timer);
 
 		//Timed spawns
-		if (timer <= 45 && flyerCounter == 2){
+		if (timer <= 75 && flyerCounter == 3){
 			flyerCounter -= 1;
 			var flyer2 = flyers.getFirstAvailable();
 			flyer2.exists = true;	
 		}
-		if (timer <= 30 && grounderCounter == 1){
+		
+		if (timer <= 60 && grounderCounter == 2){
 			grounderCounter -= 1;
 			var grounder1 = grounders.getFirstAvailable();
+            grounder1.driveDistance = WALL_COUNT_ONE * Wall.WIDTH;
 			grounder1.spawnSide = 0;
-			grounder1.exists = true;
+			grounder1.carSpeed = 150;
+            grounder1.exists = true;
 		}
-		
-		if (timer <= 15 && flyerCounter == 1){
+        
+        if (timer <= 45 && flyerCounter == 2){
 			flyerCounter -= 1;
 			var flyer3 = flyers.getFirstAvailable();
-			flyer3.exists = true;
-		}	
+            flyer3.exists = true;
+        }
+
+        if (timer <= 15 && grounderCounter == 1){
+			grounderCounter -= 1;
+			var grounder2 = grounders.getFirstAvailable();
+			grounder2.x = 642;
+			grounder2.spawnSide = 1;
+            grounder2.startLine = SECONDWALL_START_X;
+            grounder2.carSpeed = 150;
+            grounder2.exists = true;
+		}
+        
+        if (timer <= 30 && flyerCounter == 1){
+			flyerCounter -= 1;
+			var flyer4 = flyers.getFirstAvailable();
+            flyer4.exists = true;
+        }
 
 		if (timer <= 0){
-			FlxG.switchState(new Level1AdvanceState());
+			FlxG.switchState(new Level2AdvanceState());
 		}
 
 		//Powerup Spawn
-		if (timer <= 30 && powerupCounter == 1){
+		if (timer <= 45 && powerupCounter == 1){
 			powerupCounter -= 1;
-			speedPowerup = new Speed(500,438);
-			add(speedPowerup);
+			healthPowerup = new ExtraHit(500,438);
+			add(healthPowerup);
 		}
 	}
 

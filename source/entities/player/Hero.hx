@@ -20,8 +20,11 @@ class Hero extends FlxSprite {
     public static var X_SPEED(default, never):Float = 200;
     public static var X_OFFSET(default, never):Int = 7;
     public static var JUMP_SPEED(default, never):Float = -200;
-    public var lifeCounter = 1;
     
+    public var lifeCounter = 1;
+
+    public var speedStat = 200;
+
     private var leftInput:Bool = false;
     private var rightInput:Bool = false;
     private var jumpInput:Bool = false;
@@ -59,7 +62,7 @@ class Hero extends FlxSprite {
 
         // Horizontal movement
         var direction:Int = getMoveDirectionCoefficient(leftInput, rightInput);
-        velocity.x = X_SPEED * direction;
+        velocity.x = speedStat * direction;
         if (direction < 0) {
             flipX = true;
             animation.play(WALK_ANIMATION);
