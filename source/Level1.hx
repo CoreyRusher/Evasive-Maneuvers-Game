@@ -3,11 +3,12 @@ package;
 /**
 	Imports
 **/
+import entities.powerups.ExtraHit;
 import flixel.FlxBasic;
 import flixel.text.FlxText;
 import timer.Timer;
 import entities.projectiles.Fireball;
-import entities.powerups.ExtraHit;
+import entities.powerups.Speed;
 import flixel.FlxObject;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -31,6 +32,8 @@ class Level1 extends FlxState
 	private var FLYER_COUNT = 3;
 	private var flyerCounter = 3;
 
+	private var healthPowerup:ExtraHit;
+	private var speedPowerup:Speed;
 	private var powerupCounter = 1;
 
 	private var hero:Hero;
@@ -134,6 +137,12 @@ class Level1 extends FlxState
 
 		// Resolve grounder collision.
 		FlxG.overlap(hero, grounders, resolveHeroGrounderOverlap);
+
+		//Resolve speed powerup collision.
+		FlxG.overlap(hero, speedPowerup, resolveHeroSpeedPowerupOverlap);
+
+		//Resolve health powerup collision.
+		FlxG.overlap(hero, healthPowerup, resolveHeroHealthPowerupOverlap);
 		
 		//Update the timer.
 		timer -= elapsed;
@@ -148,6 +157,7 @@ class Level1 extends FlxState
 		if (timer <= 30 && grounderCounter == 1){
 			grounderCounter -= 1;
 			var grounder1 = grounders.getFirstAvailable();
+			grounder1.spawnSide = 0;
 			grounder1.exists = true;
 		}
 		
@@ -162,18 +172,22 @@ class Level1 extends FlxState
 		}
 
 		//Powerup Spawn
-		/* if (timer <= 30 && powerupCounter == 1){
+		if (timer <= 30 && powerupCounter == 1){
 			powerupCounter -= 1;
-			var powerup = new ExtraHit(500,438);
-			add(powerup);
+			speedPowerup = new Speed(500,438);
+			add(speedPowerup);
 		}
-		 */
 	}
 
 	/**
 		Function called when an overlap between hero and fireball is detected.
 	**/
 	private function resolveHeroFireballOverlap(hero:Hero, fireball:Fireball) {
+		if (hero.lifeCounter > 1){
+			fireball.kill();
+			hero.lifeCounter -= 1;
+		}
+		else{
 		fireball.kill();
 		hero.kill();
 		FlxG.switchState(new FailState());
@@ -181,19 +195,36 @@ class Level1 extends FlxState
 		#if debug
 		//trace("Hero and Fireball collided!");
 		#end
+		}
 	}
 
 	private function resolveHeroFlyerOverlap(hero:Hero, flyer:Flyer) {
+		if (hero.lifeCounter > 1){
+			flyer.kill();
+			hero.lifeCounter -= 1;
+		}
+		else{
 		flyer.kill();
 		hero.kill();
 		FlxG.switchState(new FailState());
-
+		}
 		#if debug
 		//trace("Hero and Flyer collided!");
 		#end
 	}
 
 	private function resolveHeroGrounderOverlap(hero:Hero, grounder:Grounder) {
+		if (hero.lifeCounter > 1){
+			if (grounder.spawnSide == 0){
+			hero.lifeCounter -= 1;
+			grounder.x = -32;
+			}
+			if (grounder.spawnSide == 1){
+				hero.lifeCounter -= 1;
+				grounder.x = 642;
+			}	
+		}
+		else{
 		grounder.kill();
 		hero.kill();
 		FlxG.switchState(new FailState());
@@ -201,5 +232,16 @@ class Level1 extends FlxState
 		#if debug
 		//trace("Hero and Grounder collided!");
 		#end
+		}
+	}
+
+	private function resolveHeroSpeedPowerupOverlap(hero:Hero, speedPowerup:Speed){
+		speedPowerup.kill();
+		hero.speedStat = 300;
+	}
+
+	private function resolveHeroHealthPowerupOverlap(hero:Hero, healthPowerup:ExtraHit){
+		healthPowerup.kill();
+		hero.lifeCounter += 1;
 	}
 }

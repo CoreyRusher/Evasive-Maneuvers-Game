@@ -23,6 +23,7 @@ class Grounder extends FlxSprite {
     public var carSpeed = 250;
     public var startLine = 0;
 
+    public var spawnSide:Int = 0;
     /**
 	    Constructor
     **/
