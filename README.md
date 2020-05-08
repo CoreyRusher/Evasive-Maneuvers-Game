@@ -10,6 +10,10 @@ Evasive Maneuvers
 Your objective is to survive. In the process, you must avoid projectiles from every direction. 
 There are three stages to complete. Good luck.
 
+
+![hover-over-text](/docs/gameScreenshot.png?raw=true)
+
+
 ## Win Condition
 
 Survive until the timer reaches zero.
